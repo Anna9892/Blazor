@@ -1,12 +1,13 @@
 ﻿@page "/Factorial"
 @rendermode InteractiveServer
+
+@using System.Numerics;
 <h3>Factorial</h3>
 
 <div class="factorial">
     <div>
     <label for="number">Число для вычисления факториала</label>
-    <input type="number" id="number" @bind="number" />
-    <span>! = @factorial</span>
+    <input type="number" id="number" @bind="number" @bind:after="Calculate"/>
     <button @onclick="Calculate">Вычислить</button>
 </div>
 <div id="factorial-result">@number! = @factorial</div>
@@ -15,7 +16,7 @@
 @code 
 {
     int number = 0;
-    int factorial = 1;
+    BigInteger factorial = 1;
     void Calculate()
     {
         factorial = 1;
