@@ -1,0 +1,42 @@
+﻿@page "/Power"
+@rendermode InteractiveServer
+
+@using System.Numerics;
+<h3>Power (Возведение в степень)</h3>
+
+<div class="power">
+    <div>
+        <label for="baseNumber">Число для возведения</label>
+        <input type="number"
+               id="baseNumber"
+               @bind="baseNumber" @bind:after="Calculate"
+               class="form-control" />
+
+        <label for="exponent">В какую степень возвести</label>
+        <input type="number"
+               id="exponent"
+               @bind="exponent" @bind:after="Calculate"
+               class="form-control" />
+
+        <button @onclick="Calculate">Вычислить</button>
+    </div>
+    <div id="power-result" style="margin-top: 15px;">@baseNumber<sup>@exponent</sup> = @result</div>
+</div>
+
+@code {
+    int baseNumber = 1;
+    int exponent = 1;
+    BigInteger result = 1;
+
+    private void Calculate()
+    {
+        if (exponent < 0)
+        {
+            
+            result = 0;
+            return;
+        }
+
+        result = BigInteger.Pow(baseNumber, exponent);
+    }
+}
