@@ -1,0 +1,61 @@
+﻿@page "/Fibonacci"
+@rendermode InteractiveServer
+
+@using System.Numerics;
+<h3>Последовательность Фибоначчи</h3>
+
+<div class="fibonacci">
+    <div>
+        <label for="limit">Укажите предел:</label>
+        <input type="number"
+               id="limit"
+               @bind="limit" @bind:after="Calculate"
+               class="form-control" />
+        <button @onclick="Calculate">Сгенерировать</button>
+    </div>
+
+    <div id="fibonacci-result" style="margin-top: 15px; line-height: 2;">
+        <strong>Числа Фибоначчи до @limit:</strong><br />
+        @if (fibonacciList.Count > 0)
+        {
+            <span>@string.Join(", ", fibonacciList)</span>
+        }
+        else
+        {
+            <span class="text-muted">Нет чисел для отображения</span>
+        }
+    </div>
+</div>
+
+@code {
+    long limit = 100; 
+    List<BigInteger> fibonacciList = new();
+
+  
+    protected override void OnInitialized()
+    {
+        Calculate();
+    }
+
+      void Calculate()
+    {
+        fibonacciList.Clear();
+
+        if (limit < 0) return;
+
+        BigInteger a = 0;
+        BigInteger b = 1;
+
+       
+        if (a <= limit) fibonacciList.Add(a);
+
+        
+        while (b <= limit)
+        {
+            fibonacciList.Add(b);
+            BigInteger next = a + b;
+            a = b;
+            b = next;
+        }
+    }
+}
