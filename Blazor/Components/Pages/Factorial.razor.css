@@ -1,0 +1,9 @@
+﻿.factorial 
+{
+    display:flex;
+    justify-content:space-between;
+}
+#factorial-result
+{
+    font-size: 32px;
+}

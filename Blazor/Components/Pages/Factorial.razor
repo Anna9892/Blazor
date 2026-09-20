@@ -1,0 +1,27 @@
+﻿@page "/Factorial"
+@rendermode InteractiveServer
+<h3>Factorial</h3>
+
+<div class="factorial">
+    <div>
+    <label for="number">Число для вычисления факториала</label>
+    <input type="number" id="number" @bind="number" />
+    <span>! = @factorial</span>
+    <button @onclick="Calculate">Вычислить</button>
+</div>
+<div id="factorial-result">@number! = @factorial</div>
+</div>
+
+@code 
+{
+    int number = 0;
+    int factorial = 1;
+    void Calculate()
+    {
+        factorial = 1;
+        for(int i=1; i<=number; i++)
+        {
+            factorial *= i;
+        }
+    }
+}
