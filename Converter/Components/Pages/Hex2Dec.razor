@@ -1,0 +1,77 @@
+﻿@page "/Hex2Dec"
+@rendermode InteractiveServer
+
+<h3>Hex2Dec (Шестнадцатеричное в десятичное)</h3>
+
+<div>
+    <label>Шестнадцатеричное число (0–9, A–F, без префикса 0x)</label>
+    <input type="text" @bind="hexInput" />
+    <button @onclick="Calculate">Перевести</button>
+</div>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div>@errorMessage</div>
+}
+else
+{
+    <div>Результат: @hexInput = @result</div>
+}
+
+@code {
+    private string hexInput = "";
+    private long result = 0;
+    private string errorMessage = "";
+
+    private void Calculate()
+    {
+        errorMessage = "";
+        result = 0;
+
+        if (string.IsNullOrWhiteSpace(hexInput))
+        {
+            errorMessage = "Пожалуйста, введите шестнадцатеричное число.";
+            return;
+        }
+
+
+        var cleanInput = hexInput.Trim().ToUpper();
+
+    
+        if (cleanInput.StartsWith("0X"))
+        {
+            cleanInput = cleanInput.Substring(2);
+        }
+
+        if (string.IsNullOrEmpty(cleanInput))
+        {
+            errorMessage = "Некорректный формат числа.";
+            return;
+        }
+
+        
+        foreach (var c in cleanInput)
+        {
+            if (!((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F')))
+            {
+                errorMessage = "Вводите только цифры 0–9 и буквы A–F (без пробелов).";
+                return;
+            }
+        }
+
+        try
+        {
+            result = Convert.ToInt64(cleanInput, 16);
+        }
+        catch (OverflowException)
+        {
+            errorMessage = "Число слишком большое для обработки (не помещается в long).";
+            return;
+        }
+        catch
+        {
+            errorMessage = "Не удалось преобразовать число.";
+            return;
+        }
+    }
+}
