@@ -1,0 +1,62 @@
+﻿@page "/Bin2Dec"
+@rendermode InteractiveServer
+
+<h3>Bin2Dec (Двоичное в десятичное)</h3>
+
+<div>
+    <label>Двоичное число для перевода (только 0 и 1)</label>
+    <input type="text" @bind="binaryInput" />
+    <button @onclick="Calculate">Перевести</button>
+</div>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div>@errorMessage</div>
+}
+else
+{
+    <div>Результат: @binaryInput = @result</div>
+}
+
+@code {
+    private string binaryInput = "";
+    private long result = 0;
+    private string errorMessage = "";
+
+    private void Calculate()
+    {
+        errorMessage = "";
+        result = 0;
+
+        if (string.IsNullOrWhiteSpace(binaryInput))
+        {
+            errorMessage = "Пожалуйста, введите двоичное число.";
+            return;
+        }
+
+        // Проверяем, что строка состоит только из 0 и 1
+        foreach (var c in binaryInput)
+        {
+            if (c != '0' && c != '1')
+            {
+                errorMessage = "Вводите только цифры 0 и 1.";
+                return;
+            }
+        }
+
+        try
+        {
+            result = Convert.ToInt64(binaryInput, 2);
+        }
+        catch (OverflowException)
+        {
+            errorMessage = "Число слишком большое для обработки.";
+            return;
+        }
+        catch
+        {
+            errorMessage = "Не удалось преобразовать число.";
+            return;
+        }
+    }
+}

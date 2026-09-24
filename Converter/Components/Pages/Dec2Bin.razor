@@ -1,0 +1,46 @@
+﻿@page "/Dec2Bin"
+@rendermode InteractiveServer
+
+<h3>Dec2Bin (Десятичное в двоичное)</h3>
+
+<div class="dec-to-bin">
+    <div>
+        <label for="decimalNumber">Десятичное число для перевода</label>
+        <input type="number"
+               id="decimalNumber"
+               @bind="decimalNumber" @bind:after="Calculate"
+               class="form-control" />
+
+        <button @onclick="Calculate">Перевести</button>
+    </div>
+
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div id="bin-error" style="margin-top: 15px;">@errorMessage</div>
+    }
+    else
+    {
+        <div id="bin-result" style="margin-top: 15px;">Результат: @decimalNumber = @result</div>
+    }
+</div>
+
+@code {
+    long decimalNumber = 0;
+    string result = "0";
+    string errorMessage = "";
+
+    private void Calculate()
+    {
+        errorMessage = "";
+
+        if (decimalNumber < 0)
+        {
+            errorMessage = "Пожалуйста, введите положительное число.";
+            result = "0";
+            return;
+        }
+
+        
+        result = Convert.ToString(decimalNumber, 2);
+    }
+}
