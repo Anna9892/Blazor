@@ -9,16 +9,34 @@
 
 <h3>Tasklist</h3>
 
+<div class="statistics">
+<h5>Всего:@tasklist.Count</h5>
+<h5>Выполнено: @tasklist.Where(t=> t.DONE==true).ToList().Count</h5>
+<h5>Осталось: @tasklist.Where(t => t.DONE == true).ToList().Count</h5>
+</div>
+
+<hr/>
 <ul>
     @foreach (TODO task in tasklist)
     {
-    <li>@task.Description</li>    
+    <li>
+        <input type="checkbox" id="@task.Description"@bind="task.DONE"/>
+        <label for="@task. Description">@task.Description</label>
+     </li> 
     }
 </ul>
 
 @code 
 {
-    List<TODO> tasklist = [];
+    //List<TODO> tasklist = [];
+    List<TODO> tasklist =
+    [
+    new TODO{Description = "Полить цветы"},
+    new TODO{ Description = "Покормить собаку"},
+    new TODO{Description = "Помыть посуду"},
+
+    ];
+
     string description;
     void AddTask()
     {
