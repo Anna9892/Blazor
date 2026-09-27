@@ -1,5 +1,6 @@
 <Solution>
   <Project Path="Blazor/Blazor.csproj" />
   <Project Path="Converter/Converter.csproj" Id="9aa2f7d2-524f-4d2d-83cc-27bdd7d95018" />
+  <Project Path="Movies/Movies.csproj" Id="92067390-9918-49ac-8ebf-bcbe76721ec4" />
   <Project Path="TODOlist/TODOlist.csproj" Id="f13bf8f4-4db8-43ad-aa20-9d75414d2596" />
 </Solution>
