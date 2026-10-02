@@ -2,47 +2,72 @@
 @rendermode InteractiveServer
 
 <div class="controls">
-<input type="text" placeholder="Новая задача" class="form-control" @bind="description"/> 
-<button class="btn btn-primery" @onclick="AddTask"> Добавить</button>
+    <input type="text" placeholder="Новая задача" class="form-control" @bind="description" />
+    <button class="btn btn-primary" @onclick="AddTask">Добавить</button>
 </div>
 <hr />
 
 <h3>Tasklist</h3>
 
 <div class="statistics">
-<h5>Всего:@tasklist.Count</h5>
-<h5>Выполнено: @tasklist.Where(t=> t.DONE==true).ToList().Count</h5>
-<h5>Осталось: @tasklist.Where(t => t.DONE == true).ToList().Count</h5>
+    <h5>Всего: @tasklist.Count</h5>
+    <h5>Выполнено: @tasklist.Count(t => t.DONE)</h5>
+    <h5>Осталось: @tasklist.Count(t => !t.DONE)</h5>
+    
 </div>
 
-<hr/>
+<button class="btn btn-secondary mb-3" @onclick="DeleteDoneTasks">Удалить все</button>
+<button class="btn btn-danger" @onclick="ClearAllTasks">Очистить список</button>
+
+<hr />
 <ul>
     @foreach (TODO task in tasklist)
     {
-    <li>
-        <input type="checkbox" id="@task.Description"@bind="task.DONE"/>
-        <label for="@task. Description">@task.Description</label>
-     </li> 
+        <li>
+            <input type="checkbox" id="@task.Description" @bind="task.DONE" />
+            <label for="@task.Description">@task.Description (@task.CreatedAt.ToString("HH:mm"))</label>
+            <button class="btn-delete" @onclick="() => DeleteTask(task)">Удалить</button>
+        </li>
     }
 </ul>
 
-@code 
+@code
 {
-    //List<TODO> tasklist = [];
     List<TODO> tasklist =
     [
-    new TODO{Description = "Полить цветы"},
-    new TODO{ Description = "Покормить собаку"},
-    new TODO{Description = "Помыть посуду"},
-
+        new TODO { Description = "Полить цветы" },
+        new TODO { Description = "Покормить собаку" },
+        new TODO { Description = "Помыть посуду" }
     ];
 
     string description;
+
     void AddTask()
     {
-        if (string.IsNullOrWhiteSpace(description) ) return;
-        if (tasklist.Contains(new TODO { Description = description })) return;
+        if (string.IsNullOrWhiteSpace(description)) return;
+
+        
+        if (tasklist.Any(t => string.Equals(t.Description, description, System.StringComparison.OrdinalIgnoreCase))) return;
+
         tasklist.Add(new TODO { Description = description });
-        description = ""; 
+        description = "";
     }
+
+    void DeleteTask(TODO task)
+    {
+        tasklist.Remove(task);
+    }
+
+    void DeleteDoneTasks()
+    {
+        
+        tasklist.RemoveAll(t => t.DONE == true);
+    }
+
+    void ClearAllTasks()
+    {
+       
+        tasklist.Clear();
+    }
+
 }
