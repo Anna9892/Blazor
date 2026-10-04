@@ -1,0 +1,15 @@
+﻿.controls, .controls > div
+{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+.controls a
+{
+    margin: 8px 16px 0;
+}
+
+.control select
+{
+    wigth:48px;
+}

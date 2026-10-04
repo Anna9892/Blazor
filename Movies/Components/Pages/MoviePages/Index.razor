@@ -9,38 +9,54 @@
 
 <PageTitle>Index</PageTitle>
 
-<h1>Index</h1>
+<div class="controls">
+    <div>
+        <h1>Index</h1>
 
-<p>
-    <a href="movies/create">Create New</a>
-</p>
+        <p>
+            <a href="movies/create" class="btn btn-primary">Create New</a>
+        </p>
+    </div>
 
-<QuickGrid Class="table" Items="context.Movie">
+    <div>
+        <label for="items-per-page"> Элементов на странице:</label>
+        <select id="items-per-page" @bind="pagination.ItemsPerPage" class="form-control">
+            <option value="3">3</option>
+            <option value="5">5</option>
+            <option value="8">8</option>
+            <option value="13">13</option>
+        </select>
+    </div>
+</div>
+
+<QuickGrid Class="table" Items="context.Movie" Pagination="pagination">
     @* <PropertyColumn Property="movie => movie.Title" /> *@
-    <TemplateColumn Context="movie" 
+    <TemplateColumn Context="movie"
                     Title="Название фильма"
                     Sortable="true"
                     SortBy="sortBy">
 
         <a href="@($"movies/details?id={movie.Id}")">@movie.Title</a>
-        </TemplateColumn>
+    </TemplateColumn>
     <PropertyColumn Property="movie => movie.ReleaseDate" Sortable="true" />
     <PropertyColumn Property="movie => movie.Genre" />
-   @* <PropertyColumn Property="movie => movie.URL" />
+    @* <PropertyColumn Property="movie => movie.URL" />
    <PropertyColumn Property="movie => movie.Poster" /> *@
 
     @* <TemplateColumn Context="movie">
-         <a href="@($"movies/edit?id={movie.Id}")">Edit</a> | 
+         <a href="@($"movies/edit?id={movie.Id}")">Edit</a> |
         <a href="@($"movies/details?id={movie.Id}")">Details</a>
-        <a href="@($"movies/delete?id={movie.Id}")">Delete</a> 
+        <a href="@($"movies/delete?id={movie.Id}")">Delete</a>
     </TemplateColumn> *@
 </QuickGrid>
+<Paginator State="pagination" />
 
 @code {
     private MoviesContext context = default!;
 
     GridSort<Movie> sortBy = GridSort<Movie>.ByAscending(m => m.Title);
 
+    PaginationState pagination = new PaginationState { ItemsPerPage = 3 };
     protected override void OnInitialized()
     {
         context = DbFactory.CreateDbContext();
