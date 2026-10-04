@@ -30,6 +30,7 @@
 </div>
 
 <div>
+    <div class="grid-container">
     <QuickGrid Class="table" Items="context.Movie" Pagination="pagination">
         @* <PropertyColumn Property="movie => movie.Title" /> *@
         <TemplateColumn Context="movie"
@@ -38,7 +39,9 @@
                         Sortable="true"
                         SortBy="sortBy">
 
-            <a href="@($"movies/details?id={movie.Id}")">@movie.Title</a>
+            <a href="@($"movies/details?id={movie.Id}")">
+                @(movie.Title.Length < 50 ? movie.Title : @movie.Title.Substring(0, 50))
+                </a>
         </TemplateColumn>
         <PropertyColumn Class="release-date" Property="movie => movie.ReleaseDate" Sortable="true" />
         <PropertyColumn Class="genre" Property="movie => movie.Genre" />
@@ -52,6 +55,7 @@
         </TemplateColumn> *@
     </QuickGrid>
     <Paginator State="pagination" />
+    </div>
 </div>
 
 @code {
