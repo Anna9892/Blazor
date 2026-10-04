@@ -6,17 +6,20 @@
 
 <PageTitle>Edit</PageTitle>
 
-<h1>Edit</h1>
+@* <h1>Edit</h1>
 
 <h2>Movie</h2>
-<hr />
+<hr /> *@
 @if (Movie is null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-    <div class="row">
+    <h1>@Movie.Title edit</h1>
+    <hr/>
+    <div class="movie-container">
+
         <div class="col-md-4">
             <EditForm method="post" Model="Movie" OnValidSubmit="UpdateMovie" FormName="edit" Enhance>
                 <DataAnnotationsValidator />
@@ -50,6 +53,7 @@ else
                 <button type="submit" class="btn btn-primary">Save</button>
             </EditForm>
         </div>
+        <img src="@Movie.Poster" />
     </div>
 }
 

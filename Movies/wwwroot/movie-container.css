@@ -1,0 +1,13 @@
+﻿.movie-container
+
+{
+    display:flex;
+    justify-content:space-between;
+}
+.movie-container > dl{
+    width:50%;
+}
+
+    .movie-container img {
+        width: 40%;
+    }
