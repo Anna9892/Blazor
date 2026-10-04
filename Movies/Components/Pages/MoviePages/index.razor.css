@@ -11,5 +11,14 @@
 
 .control select
 {
-    wigth:48px;
+    width:48px;
+}
+
+::deep .movie-title
+{
+    width:50%;
+}
+
+::deep .release-date, .genre {
+    width: 25%;
 }
