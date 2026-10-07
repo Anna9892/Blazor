@@ -1,0 +1,111 @@
+﻿@page "/academy-info"
+@using Microsoft.AspNetCore.Components.Web
+@using Academy.Models
+@using Microsoft.EntityFrameworkCore
+@inject Vpu521ImportContext DbContext
+@rendermode RenderMode.InteractiveServer
+
+<PageTitle>Информация Академии</PageTitle>
+
+<div class="container mt-4">
+    <h1 class="mb-4 text-primary">Данные Академии (База VPU_521_Import)</h1>
+
+    @if (loading)
+    {
+        <div class="alert alert-info">Загрузка данных из базы SQL Server...</div>
+    }
+    else
+    {
+        <div class="row">
+            <!-- НАПРАВЛЕНИЯ ОБУЧЕНИЯ -->
+            <div class="col-md-6 mb-4">
+                <div class="card shadow border-0">
+                    <div class="card-header bg-success text-white"><h5>Направления обучения (Directions)</h5></div>
+                    <ul class="list-group list-group-flush">
+                        @foreach (var dir in Directions)
+                        {
+                            <!-- Используем точное свойство DirectionName из базы данных -->
+                            <li class="list-group-item">@dir.DirectionId — @dir.DirectionName</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+
+            <!-- ГРУППЫ -->
+            <div class="col-md-6 mb-4">
+                <div class="card shadow border-0">
+                    <div class="card-header bg-warning text-dark"><h5>Группы (Groups)</h5></div>
+                    <ul class="list-group list-group-flush">
+                        @foreach (var group in Groups)
+                        {
+                            <!-- Используем свойство группы (если подчеркнет Name, замените на GroupName) -->
+                            <li class="list-group-item">@group.GroupName</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- СТУДЕНТЫ -->
+            <div class="col-md-6 mb-4">
+                <div class="card shadow border-0">
+                    <div class="card-header bg-info text-white"><h5>Студенты (Students)</h5></div>
+                    <div class="card-body" style="max-height: 350px; overflow-y: auto;">
+                        <ul class="list-group list-group-flush">
+                            @foreach (var student in Students)
+                            {
+                                <!-- Если подчёркивает, откройте Student.cs и проверьте имена свойств -->
+                                <li class="list-group-item">@student.FirstName @student.LastName</li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ПРЕПОДАВАТЕЛИ -->
+            <div class="col-md-6 mb-4">
+                <div class="card shadow border-0">
+                    <div class="card-header bg-danger text-white"><h5>Преподаватели (Teachers)</h5></div>
+                    <div class="card-body" style="max-height: 350px; overflow-y: auto;">
+                        <ul class="list-group list-group-flush">
+                            @foreach (var teacher in Teachers)
+                            {
+                                <!-- Если подчёркивает, откройте Teacher.cs и проверьте имена свойств -->
+                                <li class="list-group-item">@teacher.FirstName @teacher.LastName</li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private bool loading = true;
+    private List<Direction> Directions = new();
+    private List<Group> Groups = new();
+    private List<Student> Students = new();
+    private List<Teacher> Teachers = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // Подгружаем списки через точные DbSet свойства вашего контекста
+            Directions = await DbContext.Directions.ToListAsync();
+            Groups = await DbContext.Groups.ToListAsync();
+            Students = await DbContext.Students.ToListAsync();
+            Teachers = await DbContext.Teachers.ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Ошибка при загрузке: {ex.Message}");
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+}
