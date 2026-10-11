@@ -8,12 +8,14 @@
 
 <PageTitle>Index</PageTitle>
 
+<div class=" controls"> 
+
 <h1>Index</h1>
 
 <p>
-    <a href="directions/create">Create New</a>
+        <a href="directions/create" class="btn btn-primary">Создать направление</a>
 </p>
-
+</div>
 <QuickGrid Class="table" Items="context.Directions">
     <PropertyColumn Property="direction => direction.direction_name" />
 
@@ -34,3 +36,4 @@
 
     public async ValueTask DisposeAsync() => await context.DisposeAsync();
 }
+ 

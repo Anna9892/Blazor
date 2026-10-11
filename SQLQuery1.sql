@@ -1,0 +1,1 @@
+﻿DELETE FROM Directions WHERE direction_id=0
