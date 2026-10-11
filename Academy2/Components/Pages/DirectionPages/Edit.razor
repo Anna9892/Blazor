@@ -39,7 +39,7 @@ else
 
 @code {
     [SupplyParameterFromQuery]
-    private byte direction_id { get; set; }
+    private int direction_id { get; set; }
 
     [SupplyParameterFromForm]
     private Direction? Direction { get; set; }
@@ -81,7 +81,7 @@ else
         NavigationManager.NavigateTo("/directions");
     }
 
-    private bool DirectionExists(byte direction_id)
+    private bool DirectionExists(int direction_id)
     {
         using var context = DbFactory.CreateDbContext();
         return context.Directions.Any(e => e.direction_id == direction_id);
