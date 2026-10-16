@@ -1,4 +1,6 @@
 @page "/directions"
+@rendermode InteractiveServer
+
 @using Microsoft.AspNetCore.Components.QuickGrid
 @using Microsoft.EntityFrameworkCore
 @using Academy2.Models
@@ -6,18 +8,25 @@
 @inject IDbContextFactory<Academy2Context> DbFactory
 @inject NavigationManager NavigationManager
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Направления</PageTitle>
 
-<div class=" controls"> 
-
-<h1>Index</h1>
-
-<p>
+<div class="controls">
+    <h1>Список направлений</h1>
+    <p>
         <a href="directions/create" class="btn btn-primary">Создать направление</a>
-</p>
+    </p>
 </div>
-<QuickGrid Class="table" Items="context.Directions">
-    <PropertyColumn Property="direction => direction.direction_name" />
+
+<div class="mb-3">
+    <input type="text"
+           class="form-control w-25"
+           placeholder="Поиск направления..."
+           @bind="searchString"
+           @bind:event="oninput" />
+</div>
+
+<QuickGrid Class="table table-striped" Items="FilteredDirections" Pagination="pagination">
+    <PropertyColumn Property="direction => direction.direction_name" Sortable="true" Title="Название направления" />
 
     <TemplateColumn Context="direction">
         <a href="@($"directions/edit?direction_id={direction.direction_id}")">Edit</a> |
@@ -26,14 +35,32 @@
     </TemplateColumn>
 </QuickGrid>
 
+<Paginator State="pagination" />
+
 @code {
     private Academy2Context context = default!;
+    private string searchString = string.Empty;
+    private PaginationState pagination = new PaginationState { ItemsPerPage = 5 };
 
     protected override void OnInitialized()
     {
         context = DbFactory.CreateDbContext();
     }
 
+    private IQueryable<Direction> FilteredDirections
+    {
+        get
+        {
+            var result = context.Directions.AsNoTracking();
+
+            if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                result = result.Where(d => d.direction_name.Contains(searchString));
+            }
+
+            return result;
+        }
+    }
+
     public async ValueTask DisposeAsync() => await context.DisposeAsync();
 }
- 

@@ -1,8 +1,10 @@
 @page "/groups"
+@rendermode InteractiveServer
+
 @using Microsoft.AspNetCore.Components.QuickGrid
 @using Microsoft.EntityFrameworkCore
 @using Academy2.Models
-@implements IAsyncDisposable
+
 @inject IDbContextFactory<Academy2Context> DbFactory
 @inject NavigationManager NavigationManager
 
@@ -13,10 +15,20 @@
 <p>
     <a href="groups/create">Create New</a>
 </p>
+<div class="mb-3">
+    <input type="text"
+           class="form-control w-25"
+           placeholder="Поиск по группам или направлениям..."
+           @bind="searchString"
+           @bind:event="oninput"/>
+</div>
 
-<QuickGrid Class="table" Items="context.Groups.Include(g => g.Direction)">
-    <PropertyColumn Property="group => group.group_name" />
-    <PropertyColumn Property="group => group.Direction.direction_name" />
+
+<QuickGrid Class="table" Items="FilteredGroups" Pagination="pagination">
+
+
+    <PropertyColumn Property="group => group.group_name" Sortable="true" Title="Название группы" />
+    <PropertyColumn Property="group => group.Direction.direction_name" Sortable="true" Title="Направление" />
     <PropertyColumn Property="group => group.learning_days" />
     <PropertyColumn Property="group => group.start_time" />
     <PropertyColumn Property="group => group.start_date" />
@@ -27,14 +39,36 @@
         <a href="@($"groups/delete?group_id={group.group_id}")">Delete</a>
     </TemplateColumn>
 </QuickGrid>
+<Paginator State="pagination" />
+
+
 
 @code {
-    private Academy2Context context = default!;
+    
+    private string searchString = string.Empty;
 
-    protected override void OnInitialized()
+    
+    private PaginationState pagination = new PaginationState { ItemsPerPage = 5 };
+
+    
+    private IQueryable<Group> FilteredGroups
     {
-        context = DbFactory.CreateDbContext();
-    }
+        get
+        {
+            
+            var db = DbFactory.CreateDbContext();
 
-    public async ValueTask DisposeAsync() => await context.DisposeAsync();
+            
+            var result = db.Groups.Include(g => g.Direction).AsNoTracking();
+
+      
+            if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                result = result.Where(g => g.group_name.Contains(searchString)
+                                        || (g.Direction != null && g.Direction.direction_name.Contains(searchString)));
+            }
+
+            return result;
+        }
+    }
 }
