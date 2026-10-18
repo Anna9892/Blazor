@@ -33,14 +33,14 @@
 
     <PropertyColumn Property="group => group.group_name" Sortable="true" Title="Название группы" />
     <PropertyColumn Property="group => group.Direction.direction_name" Sortable="true" Title="Направление" />
-    <PropertyColumn Property="group => group.learning_days" />
+    <PropertyColumn Property="group => new Week((int)(group.learning_days ?? 0))" />
     <PropertyColumn Property="group => group.start_time" />
     <PropertyColumn Property="group => group.start_date" />
 
     <TemplateColumn Context="group">
-        <a href="@($"groups/edit?group_id={group.group_id}")">Edit</a> |
-        <a href="@($"groups/details?group_id={group.group_id}")">Details</a> |
-        <a href="@($"groups/delete?group_id={group.group_id}")">Delete</a>
+        
+        <a href="@($"groups/details?group_id={group.group_id}")">Details</a>
+   
     </TemplateColumn>
 </QuickGrid>
 <Paginator State="pagination" />
