@@ -1,0 +1,25 @@
+﻿@using Academy2.Models;
+@using Microsoft.EntityFrameworkCore;
+@inject IDbContextFactory<Academy2Context> DbFactory
+
+<div class="mb-3">
+    <label for="direction" class="form-label">direction:</label>
+    <InputSelect id="direction" @bind-Value="Group.direction">
+        @using (Academy2Context context = DbFactory.CreateDbContext())
+        {
+            @foreach (Direction direction in context.Directions)
+            {
+                <option value="@direction.direction_id">
+                    @direction.direction_name
+                </option>
+            }
+        }
+    </InputSelect>
+    <ValidationMessage For="() => Group.direction" class="text-danger" />
+</div>
+@code 
+
+{
+    [Parameter]
+    public Group Group { get; set; }
+}
