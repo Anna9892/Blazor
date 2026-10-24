@@ -22,7 +22,7 @@
     public Group Group { get; set; }
     bool[] days = new bool[7];
 
-    void Compress()
+    public void Compress()
     {
         int mask = 0;
         for(int i=0; i < 7; i++)

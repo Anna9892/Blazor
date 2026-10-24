@@ -31,10 +31,10 @@
             
             
             <div class="mb-3">
-                <label for="learning_days" class="form-label">learning_days:</label> 
-                <InputNumber id="learning_days" @bind-Value="Group.learning_days" class="form-control" /> 
-                <ValidationMessage For="() => Group.learning_days" class="text-danger" /> 
-            </div>        
+                <LearningDays @ref="learningDaysComponent" Group="Group" />
+                <ValidationMessage For="() => Group.learning_days" class="text-danger" />
+            </div>
+
             <div class="mb-3">
                 <label for="start_time" class="form-label">start_time:</label> 
                 <InputDate Type="InputDateType.Time" id="start_time" @bind-Value="Group.start_time" class="form-control" /> 
@@ -55,6 +55,8 @@
 </div>
 
 @code {
+
+    private LearningDays? learningDaysComponent;
     [SupplyParameterFromForm]
     private Group Group { get; set; } = default!;
 
@@ -63,6 +65,7 @@
     // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
     private async Task AddGroup()
     {
+        learningDaysComponent?.Compress();
         using var context = DbFactory.CreateDbContext();
         context.Groups.Add(Group);
         await context.SaveChangesAsync();
