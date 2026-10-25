@@ -28,7 +28,7 @@
                     Title ="Студент"
                     Sortable="true"
                     SortBy="sortBy">
-        <a href="@($"student/detalis?student_id={student.stud_id}")">@student.full_name</a>
+        <a href="@($"students/details?stud_id={student.stud_id}")">@student.full_name</a>
     </TemplateColumn>
 
     <PropertyColumn Property="student => student.birth_date"          Sortable="true" />
