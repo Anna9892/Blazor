@@ -24,12 +24,7 @@ else
                 <DataAnnotationsValidator />
                 <ValidationSummary role="alert"/>
                 <input type="hidden" name="Student.stud_id" value="@Student.stud_id" />
-                <div class="mb-3">
-                <span class="text-danger">*</span>
-                    <label for="group" class="form-label">group:</label>
-                    <InputNumber id="group" @bind-Value="Student.group" class="form-control" aria-required="true"/>
-                    <ValidationMessage For="() => Student.group" class="text-danger" />
-                </div>
+                
                 @* <div class="mb-3">
                     <label for="group" class="form-label">Group:</label>
                     <InputText id="group" @bind-Value="Student.Group" class="form-control" />
@@ -68,6 +63,8 @@ else
                     <InputText id="phone" @bind-Value="Student.phone" class="form-control" />
                     <ValidationMessage For="() => Student.phone" class="text-danger" />
                 </div>
+
+                <ChooseGroup Student="Student" />
                 @* <div class="mb-3">
                     <label for="photo" class="form-label">photo:</label>
                     <InputText id="photo" @bind-Value="Student.photo" class="form-control" />
