@@ -28,6 +28,7 @@
 <QuickGrid Class="table table-striped" Items="FilteredDirections" Pagination="pagination">
     <PropertyColumn Property="direction => direction.direction_name" Sortable="true" Title="Название направления" />
 
+
     <TemplateColumn Context="direction">
         <a href="@($"directions/edit?direction_id={direction.direction_id}")">Edit</a> |
         <a href="@($"directions/details?direction_id={direction.direction_id}")">Details</a> |

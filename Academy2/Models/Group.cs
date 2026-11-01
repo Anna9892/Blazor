@@ -28,6 +28,7 @@ namespace Academy2.Models
 
         //Navigation properties:
         public Direction Direction { get; set; } //многие к одному
+        public ICollection<Student> Students { get; set; }
     }
 }
 

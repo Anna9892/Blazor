@@ -1,4 +1,6 @@
 @page "/directions/details"
+@rendermode InteractiveServer
+@using Microsoft.AspNetCore.Components.QuickGrid
 @using Microsoft.EntityFrameworkCore
 @using Academy2.Models
 @inject IDbContextFactory<Academy2Context> DbFactory
@@ -9,25 +11,40 @@
 <h1>Details</h1>
 
 <div>
-    <h2>Direction</h2>
-    <hr />
+    @* <h2>Direction</h2> *@
+    @* <hr /> *@
     @if (direction is null)
     {
         <p><em>Loading...</em></p>
     }
     else {
+        <h1>@direction.direction_name</h1>
+        <hr />
         <dl class="row">
-            <dt class="col-sm-2">direction_name</dt>
-            <dd class="col-sm-10">@direction.direction_name</dd>
+            <dt class="col-sm-2">Количество групп</dt>
+            <dd class="col-sm-10">@direction.Groups.Count</dd>
         </dl>
         <div>
             <a href="@($"/directions/edit?direction_id={direction.direction_id}")">Edit</a> |
             <a href="@($"/directions")">Back to List</a>
         </div>
+
+        <h3>Группы</h3>
+        @* <ul>
+            @foreach(Group group in direction.Groups)
+            {
+                <li>@group.group_name</li>
+            }
+        </ul> *@
+        <QuickGrid items="direction.Groups.AsQueryable()"Class="table">
+            <PropertyColumn Sortable="true" Property="group => group.group_name" />
+            <PropertyColumn Sortable="true" Property="group => group.Students.Count" />
+        </QuickGrid>
     }
 </div>
 
 @code {
+
     private Direction? direction;
 
     [SupplyParameterFromQuery]
@@ -36,7 +53,10 @@
     protected override async Task OnInitializedAsync()
     {
         using var context = DbFactory.CreateDbContext();
-        direction = await context.Directions.FirstOrDefaultAsync(m => m.direction_id == direction_id);
+        direction = await context.Directions
+                                  .Include(d=>d.Groups)
+                                  .ThenInclude(g=>g.Students)
+                                  .FirstOrDefaultAsync(m => m.direction_id == direction_id);
 
         if (direction is null)
         {
