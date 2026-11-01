@@ -22,6 +22,8 @@ else
     <div class="row">
         <div class="col-md-4">
             <EditForm method="post" Model="Student" OnValidSubmit="UpdateStudent" FormName="edit" Enhance>
+              <div class="human-container">
+                <div class="human-text-fields">
                 <DataAnnotationsValidator />
                 <ValidationSummary role="alert"/>
                 <input type="hidden" name="Student.stud_id" value="@Student.stud_id" />
@@ -66,8 +68,10 @@ else
                 </div>
 
                 <ChooseGroup Student="Student" />
+                </div>
                 <Photo Human="Student" AllowChange="true" />
-                @* <div class="mb-3">
+              </div> 
+                        @* <div class="mb-3">
                     <label for="photo" class="form-label">photo:</label>
                     <InputText id="photo" @bind-Value="Student.photo" class="form-control" />
                     <ValidationMessage For="() => Student.photo" class="text-danger" />

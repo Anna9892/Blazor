@@ -7,19 +7,21 @@
 
 <PageTitle>Create</PageTitle>
 
-<h1>Create</h1>
 
-<h2>Student</h2>
+<h1>Добавление нового студента</h1>
+
+
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="">
         <EditForm method="post" Model="Student" OnValidSubmit="AddStudent" FormName="create" Enhance>
+           <div class="human-container">
+            <div class="human-text-fields">
             <DataAnnotationsValidator />
             <ValidationSummary class="text-danger" role="alert" />
 
            
-            <ChooseGroup Student="Student" />
-            <Photo Human="Student" AllowChange="true" />
+            
            
             <ValidationMessage For="() => Student.group" class="text-danger" />
 
@@ -57,8 +59,10 @@
                 <ValidationMessage For="() => Student.phone" class="text-danger" />
             </div>
 
-           
-        
+                <ChooseGroup Student="Student" />
+            </div>
+                <Photo Human="Student" AllowChange="true" />
+            </div>
 
             <button type="submit" class="btn btn-primary mt-3">Create</button>
         </EditForm>
