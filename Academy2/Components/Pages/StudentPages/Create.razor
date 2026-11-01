@@ -84,6 +84,6 @@
         using var context = DbFactory.CreateDbContext();
         context.Students.Add(Student);
         await context.SaveChangesAsync();
-        NavigationManager.NavigateTo("/students");
+        NavigationManager.NavigateTo($"/students/details?stud_id={Student.stud_id}");
     }
 }

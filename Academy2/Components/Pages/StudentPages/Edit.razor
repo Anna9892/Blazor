@@ -127,7 +127,7 @@ else
             }
         }
 
-        NavigationManager.NavigateTo("/students");
+        NavigationManager.NavigateTo($"/students/details?stud_id={Student.stud_id}");
     }
 
     private bool StudentExists(int stud_id)
