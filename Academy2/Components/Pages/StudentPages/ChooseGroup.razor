@@ -1,27 +1,40 @@
-﻿@using Academy2.Models;
-@using Microsoft.EntityFrameworkCore;
-@inject IDbContextFactory<Academy2Context> DbFactory;
-<h5>ChooseGroup</h5>
-
+﻿@using Academy2.Models
+@using Microsoft.EntityFrameworkCore
+@inject IDbContextFactory<Academy2Context> DbFactory
 
 <div class="mb-3">
-<span class="text-danger">*</span>
-<label for="group" class="form-label">group:</label>
-@* <InputNumber id="group" @bind-Value="Student.group" class="form-control" aria-required="true"/> *@
-<InputSelect id="group" @bind-Value="Student.group" class="form-control">
-                       @using (Academy2Context context = DbFactory.CreateDbContext())
-                       {
-                           foreach(Group group in context.Groups)
-                           {
-<option value="@group.group_id">@group.group_name</option>
-                           }
-                       }
-</InputSelect>
-<ValidationMessage For="() => Student.group" class="text-danger" />
+    <span class="text-danger">*</span>
+    <label for="group" class="form-label">Группа:</label>
+
+    @if (Student is not null)
+    {
+        <InputSelect id="group" @bind-Value="Student.group" class="form-control">
+            <option value="0" disabled selected>-- Выберите группу --</option>
+            @foreach (var group in Groups)
+            {
+                <option value="@group.group_id">@group.group_name</option>
+            }
+        </InputSelect>
+    }
+    else
+    {
+        <select class="form-control" disabled>
+            <option>Загрузка групп...</option>
+        </select>
+    }
 </div>
 
-@code
+@code {
+    [Parameter]
+    public Student? Student { get; set; }
+
+    private List<Group> Groups = new();
+
+    protected override async Task OnInitializedAsync()
     {
-        [Parameter]
-    public Student Student  { get; set; }
+        using var context = DbFactory.CreateDbContext();
+        Groups = await context.Groups
+            .OrderBy(g => g.group_name)
+            .ToListAsync();
+    }
 }

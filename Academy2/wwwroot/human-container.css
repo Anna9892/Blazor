@@ -1,0 +1,19 @@
+﻿.human-container
+{
+display:flex;
+justify-content:space-between;
+}
+
+.human-taxt-fields{
+    width:40%
+}
+
+.photo-ares
+{
+    width:40%
+}
+
+.photo-ares ing
+{
+    width:100%
+}
